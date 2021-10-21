@@ -7,7 +7,7 @@ function init() {
 ```
 
 ## Installation procedure
-- `https://github.com/alchiebinan21/smt.git`
+- `git clone https://github.com/alchiebinan21/smt.git`
 - `cd smt`
 - `composer install`
 - `npm install`
