@@ -3,18 +3,18 @@ import {Link} from 'react-router-dom';
 import AppContainer from './AppContainer';
 import api from '../src/api';
 
-const Home = () => {
+const Home = (props) => {
     const [posts, setPosts] = useState(null);
 
     const fetchPost = () => {
         try {
             let isMounted = true;
-            api.getAllPosts().then(res => {
-                const result = res.data;
-                if (isMounted) setPosts(result.data);
-            });
-        } catch {
-            alert();
+                api.getAllPosts().then(res => {
+                    const result = res.data;
+                    if (isMounted) setPosts(result.data);
+                });
+        } catch(e){
+            alert(e);
         } finally {
         }
     }
@@ -59,6 +59,12 @@ const Home = () => {
                 <td>{post.title}</td>
                 <td>{post.content}</td>
                 <td>
+                    <Link
+                        className="btn btn-secondary"
+                        to={`/posts/show/${post.id}`}
+                    >
+                        View
+                    </Link>
                     <Link
                         className="btn btn-warning"
                         to={`/posts/${post.id}`}

@@ -2,10 +2,11 @@ import React from 'react';
 import { Link,Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-const Login = (props) => {
-
+const Signup = (props) => {
+    const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [repeatPassword, setRepeatPassword] = React.useState('');
     const [toHome, setToHome] = React.useState(false);
     const [authError, setAuthError] = React.useState(false);
     const [unknownError, setUnknownError] = React.useState(false);
@@ -16,13 +17,13 @@ const Login = (props) => {
         setUnknownError(false);
         axios.get('/sanctum/csrf-cookie')
             .then(response => {
-                axios.post('/auth/login', {
+                axios.post('auth/register', {
+                    name: name,
                     email: email,
-                    password: password
+                    password: password,
+                    password_confirmation: repeatPassword
                 }).then(response => {
-                        props.login();
                         setToHome(true);
-                        sessionStorage.setItem('token', response.data.access_token);
                 }).catch(error => {
                     if (error.response && error.response.status === 422) {
                         setAuthError(true);
@@ -40,8 +41,19 @@ const Login = (props) => {
 
     return (
         <div>
-            <h3>Login</h3>
+            <h3>Register</h3>
             <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <input
+                        type="name"
+                        name="name"
+                        className={"form-control" + (authError || unknownError ? ' is-invalid' : '')}
+                        placeholder="Name"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        required
+                    />
+                </div>
                 <div className="form-group">
                     <input
                         type="email"
@@ -64,16 +76,26 @@ const Login = (props) => {
                         required
                     />
                 </div>
+                <div className="form-group">
+                    <input
+                        type="password"
+                        name="password_confirmation"
+                        className={"form-control" + (authError || unknownError ? ' is-invalid' : '')}
+                        placeholder="Repeat Password"
+                        value={repeatPassword}
+                        onChange={e => setRepeatPassword(e.target.value)}
+                        required
+                    />
+                </div>
+
                 {authError ? <div className="alert alert-danger">Credentials not recognised. Please try again.</div> : null}
                 {unknownError ? <div className="alert alert-danger">There was an error submitting your details.</div> : null}
                 <div className="form-group">
-                    <button type="submit" className="btn btn-primary">Login</button>
+                    <button type="submit" className="btn btn-primary">Register</button>
                 </div>
-
-                <Link to="/signup" className="btn btn-primary">Register</Link>
             </form>
         </div>
     );
 };
 
-export default Login;
+export default Signup;

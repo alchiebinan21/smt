@@ -3,7 +3,7 @@ import AppContainer from './AppContainer';
 import { useHistory } from "react-router-dom";
 import api from '../src/api';
 
-const Add = () => {
+const Add = (props) => {
     const history = useHistory();
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('');
